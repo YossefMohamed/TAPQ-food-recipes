@@ -3,7 +3,7 @@ import './navbar.css';
 
 const Navbar = () => {
   return (
-    <div className='nav-container flex justify-between p-4 font-bold border-b-2 items-center'>
+    <div className='nav-container flex justify-between p-4 font-bold border-b-4 items-center shadow-lg '>
         <div className="logo text-4xl">
             ٌطبق
         </div>

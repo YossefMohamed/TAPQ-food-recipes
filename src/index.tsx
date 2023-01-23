@@ -7,8 +7,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <div className="mx-[150px]">
-    
  <Navbar />
+
+    <div className="main-screen">
+      
+    </div>
   </div>
 );
 

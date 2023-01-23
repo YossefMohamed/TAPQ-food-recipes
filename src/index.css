@@ -5,10 +5,17 @@
     .btn-primary {
         @apply py-2 px-4 bg-light text-main rounded shadow
     }
-    .shadow {
+    .main-shadow {
         @apply shadow-[rgba(0,_0,_0)_0px_13px_18px]
     }
   }
 body{
     font-family: 'Roboto', sans-serif;
+}
+
+.main-screen{
+    background-image: url("/public/background.png");
+    min-height: 90vh;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
