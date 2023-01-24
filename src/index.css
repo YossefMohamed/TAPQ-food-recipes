@@ -2,20 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
-    .btn-primary {
-        @apply py-2 px-4 bg-light text-main rounded shadow
-    }
-    .main-shadow {
-        @apply shadow-[rgba(0,_0,_0)_0px_13px_18px]
-    }
+  .btn-primary {
+    @apply py-2 px-4 bg-main text-light rounded w-fit hover:main-shadow text-center font-bold;
   }
-body{
-    font-family: 'Roboto', sans-serif;
+  .main-shadow {
+    @apply shadow-[rgba(0,_0,_0)_5px_5px_0px_0px];
+  }
+
+  .title {
+    @apply text-4xl font-bold border-b-4 border-b-main w-fit my-3;
+  }
+}
+body {
+  font-family: "Roboto", sans-serif;
 }
 
-.main-screen{
-    background-image: url("/public/background.png");
-    min-height: 90vh;
-    background-repeat: no-repeat;
-    background-size: cover;
+* {
+  transition: all 150ms ease-in;
+}
+.main-screen {
+  margin: 60px 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.image1 {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/public/image1.png");
+}
+
+.image2 {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/public/image2.png");
+}
+.image3 {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/public/image3.png");
+}
+.image4 {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/public/image4.png");
+}
+
+.typo {
+  font-family: "Dancing Script";
 }
