@@ -6,7 +6,7 @@
     @apply py-2 px-4 bg-main text-tsecondary rounded w-fit hover:main-shadow text-center font-bold;
   }
   .main-shadow {
-    @apply shadow-[rgba(0,_0,_0)_5px_5px_0px_0px];
+    @apply shadow-2xl;
   }
 
   .title {

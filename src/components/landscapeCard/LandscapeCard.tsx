@@ -1,16 +1,19 @@
 import React from "react";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 function LandscapeCard() {
   return (
     <a
       href="#"
-      className="flex h-[250px] items-center  bg-white border border-gray-200 rounded-lg shadow flex-row"
+      className="flex h-[250px] items-center relative bg-white border border-gray-200 rounded-lg shadow flex-row"
     >
-      <img
-        className="object-cover w-1/3 rounded-t-lg h-full"
-        src="/image2.png"
-        alt=""
-      />
+      <div className="absolute top-2 right-2">
+        <span className="mt-2 inline-block rounded-full bg-main text-tsecondary p-3 text-sm font-medium">
+          {" "}
+          <AiFillHeart />
+        </span>
+      </div>
+      <img className="object-cover w-1/3 h-full" src="/image2.png" alt="" />
       <div className="flex-1 flex justify-around flex-col  p-4 leading-normal">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           <span className="text-main"> Recipe Of The Day : </span>
