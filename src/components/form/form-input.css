@@ -1,0 +1,61 @@
+.group {
+  margin: 10px 0 0px;
+  position: relative;
+}
+
+.group .form-input {
+  margin: 35px 0 15px;
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #999999;
+  padding: 10px 10px 5px 1rem;
+  font-size: 0.9rem;
+  background: none;
+}
+
+.form-label {
+  -webkit-transition: all 300ms ease-in;
+  transition: all 300ms ease-in;
+  font-size: 1rem;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  color: gray;
+}
+
+.form-input:focus {
+  border-bottom: 1px solid #0a0a0a;
+}
+
+.form-input:focus ~ .form-label {
+  top: 0%;
+  left: 0.5rem;
+  -webkit-transform: translateY(10%);
+  transform: translateY(10%);
+  color: black;
+  font-size: 1.2rem;
+}
+
+.shrink {
+  top: 0%;
+  left: 0.5rem;
+  -webkit-transform: translateY(10%);
+  transform: translateY(10%);
+  color: black;
+  font-size: 1.2rem;
+}
+
+input[type="password"] {
+  letter-spacing: 0.3rem;
+}
+
+.input--header {
+  font-size: 1.5rem;
+  color: gray;
+  margin: 1rem 0;
+  font-weight: light;
+}
+/*# sourceMappingURL=form-input.css.map */

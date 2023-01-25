@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer components {
   .btn-primary {
-    @apply py-2 px-4 bg-main text-tsecondary rounded w-fit hover:main-shadow text-center font-bold;
+    @apply py-2 px-4 bg-main text-tsecondary border rounded w-fit hover:main-shadow text-center font-bold cursor-pointer border-main hover:border-main hover:text-main hover:bg-tsecondary transition-all;
   }
   .main-shadow {
     @apply shadow-2xl;
@@ -17,6 +17,9 @@
   }
   .tag {
     @apply cursor-pointer text-sm inline-flex items-center font-bold   px-3 py-1 rounded-full bg-white text-gray-700 border hover:bg-main hover:text-tsecondary;
+  }
+  .alert {
+    @apply bg-orange-100 border-l-4 border-main text-orange-700 p-4;
   }
 }
 body {

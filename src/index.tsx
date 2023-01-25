@@ -4,6 +4,7 @@ import "./index.css";
 import MainLayout from "./layouts/MainLayout";
 import Favorite from "./routes/Favorite";
 import Index from "./routes/Index";
+import Login from "./routes/Login";
 import Recipe from "./routes/Recipe";
 import Recipes from "./routes/Recipes";
 
@@ -24,6 +25,10 @@ const routes = createBrowserRouter([
       {
         path: "favorite",
         element: <Favorite />,
+      },
+      {
+        path: "/signin",
+        element: <Login />,
       },
     ],
   },
