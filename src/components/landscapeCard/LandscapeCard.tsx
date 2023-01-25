@@ -1,28 +1,25 @@
-import { AiOutlineHeart } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import React from "react";
 
-function Card() {
+function LandscapeCard() {
   return (
-    <div className="overflow-hidden rounded-2xl shadow-2xl  hover:shadow-xl hover:bg-gray-100 ">
-      <div className="flex items-center h-[250px] overflow-hidden">
-        <img src="/image2.png" alt="Hamburger" className="w-full h-full" />
-      </div>
-      <div className="p-2">
-        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          <div>
-            <p className="text-tmuted">Fast Food • Burger</p>
-
-            <Link to="/recipes/234">
-              <h2 className="mt-2 text-lg font-semibold text-gray-800">
-                Beef Hamburger
-              </h2>
-            </Link>
-          </div>
-          <span className="mt-2 inline-block rounded-full bg-main text-tsecondary p-3 text-sm font-medium">
-            {" "}
-            <AiOutlineHeart />
-          </span>
-        </div>
+    <a
+      href="#"
+      className="flex h-[250px] items-center  bg-white border border-gray-200 rounded-lg shadow flex-row"
+    >
+      <img
+        className="object-cover w-1/3 rounded-t-lg h-full"
+        src="/image2.png"
+        alt=""
+      />
+      <div className="flex-1 flex justify-around flex-col  p-4 leading-normal">
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <span className="text-main"> Recipe Of The Day : </span>
+          Pizza With Naguts
+        </h5>
+        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          Here are the biggest enterprise technology acquisitions of 2021 so
+          far, in reverse chronological order.
+        </p>
         <hr className="my-4 text-tmuted" />
         <div className="flex flex-wrap justify-between">
           <p className="inline-flex items-center">
@@ -63,8 +60,8 @@ function Card() {
           </p>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 
-export default Card;
+export default LandscapeCard;
