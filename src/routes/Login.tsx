@@ -7,6 +7,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -29,7 +30,7 @@ function Login() {
   };
   return (
     <div className="flex justify-around  mt-[80px]">
-      <div className="sign-up w-[48vh]">
+      <div className="sign-up w-[45%]">
         <h2 className="title">Already have an account</h2>
         <form className="sign-up-form" onSubmit={onSubmit}>
           {error && (
@@ -56,7 +57,7 @@ function Login() {
           <button className="btn btn-primary">Sign Up</button>
         </form>
       </div>
-      <div className="sign-up w-[48vh]">
+      <div className="sign-up w-[45%]">
         <h2 className="title">I do not have an account</h2>
         <form className="sign-up-form" onSubmit={onSubmit}>
           {error && (

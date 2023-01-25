@@ -1,22 +1,56 @@
-import React from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import {
+  useLocation,
+  useMatches,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import Card from "../components/card/Card";
 import LandscapeCard from "../components/landscapeCard/LandscapeCard";
 import Pagination from "../components/pagination/Pagination";
 
 function Recipes() {
+  const [search, setSearch] = useState("");
+  let [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location);
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!search) return;
+    navigate(`/recipes?search=${search}`);
+  };
+
+  // useEffect(() => {
+  //   alert("changes");
+  // }, [location]);
+
   return (
     <div>
-      <div className="header mt-[80px] ">
+      {!searchParams.get("search") ? (
+        <>
+          <div className="header mt-[80px] ">
+            <div className="text-tmuted text-4xl">
+              Welcome To{" "}
+              <span className="text-main text-6xl font-semibold">TAPQ</span>
+            </div>
+          </div>
+          <div className="landscape-card my-10">
+            <LandscapeCard />
+          </div>
+        </>
+      ) : (
         <div className="text-tmuted text-4xl">
-          Welcome To{" "}
-          <span className="text-main text-6xl font-semibold">TAPQ</span>
+          Heres The Results For{" "}
+          <span className="text-main font-bold">
+            {searchParams.get("search")}
+          </span>
         </div>
-      </div>
-      <div className="landscape-card my-10">
-        <LandscapeCard />
-      </div>
+      )}
       <div className="search my-10">
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="flex">
             <div className="relative w-full">
               <input
@@ -24,7 +58,10 @@ function Recipes() {
                 id="search-dropdown"
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg  border-l-2 border border-gray-300 focus:ring-main focus:border-main outline-none"
                 placeholder="Search"
-                required
+                value={search}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSearch(e.target.value);
+                }}
               />
               <button
                 type="submit"
