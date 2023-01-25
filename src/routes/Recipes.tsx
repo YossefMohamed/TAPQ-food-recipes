@@ -34,7 +34,7 @@ function Recipes() {
           <div className="header mt-[80px] ">
             <div className="text-tmuted text-4xl">
               Welcome To{" "}
-              <span className="text-main text-6xl font-semibold">TAPQ</span>
+              <span className="text-main text-6xl font-bold">TAPQ</span>
             </div>
           </div>
           <div className="landscape-card my-10">

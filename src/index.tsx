@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import MainLayout from "./layouts/MainLayout";
+import CreateRecipe from "./routes/CreateRecipe";
 import Favorite from "./routes/Favorite";
 import Index from "./routes/Index";
 import Login from "./routes/Login";
@@ -29,6 +30,10 @@ const routes = createBrowserRouter([
       {
         path: "/signin",
         element: <Login />,
+      },
+      {
+        path: "/create-recipe",
+        element: <CreateRecipe />,
       },
     ],
   },
