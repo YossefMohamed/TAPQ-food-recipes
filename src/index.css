@@ -3,25 +3,28 @@
 @tailwind utilities;
 @layer components {
   .btn-primary {
-    @apply py-2 px-4 bg-main text-light rounded w-fit hover:main-shadow text-center font-bold;
+    @apply py-2 px-4 bg-main text-tsecondary rounded w-fit hover:main-shadow text-center font-bold;
   }
   .main-shadow {
     @apply shadow-[rgba(0,_0,_0)_5px_5px_0px_0px];
   }
 
   .title {
-    @apply text-4xl font-bold border-b-4 border-b-main w-fit my-3;
+    @apply text-3xl italic py-2 font-semibold text-gray-800 border-b-4 border-b-main w-fit my-10;
+  }
+  .sec-title {
+    @apply text-2xl  py-2 font-semibold text-center border-b-4 text-main my-10;
+  }
+  .tag {
+    @apply cursor-pointer text-sm inline-flex items-center font-bold   px-3 py-1 rounded-full bg-white text-gray-700 border hover:bg-main hover:text-tsecondary;
   }
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
-* {
-  transition: all 150ms ease-in;
-}
 .main-screen {
-  margin: 60px 0;
+  margin: 80px 0;
   background-repeat: no-repeat;
   background-size: cover;
 }
