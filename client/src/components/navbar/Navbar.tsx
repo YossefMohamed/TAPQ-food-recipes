@@ -1,4 +1,4 @@
-import { BsMoonFill, BsSunFill } from "react-icons/bs";
+import { BsHeartFill, BsMoonFill, BsSunFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -27,8 +27,10 @@ const Navbar = () => {
           <Link to="recipes">Recipes</Link>
         </div>
 
-        <div className="item">
-          <Link to="recipes">Blog</Link>
+        <div className="item ">
+          <Link to="/favorite" className="flex gap-2 items-center ">
+            Favorites
+          </Link>
         </div>
         <div className="item cursor-pointer">
           {themeState.theme === "light" ? (
