@@ -2,12 +2,14 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import MainLayout from "./layouts/MainLayout";
+import { store } from "./redux/store/store";
 import CreateRecipe from "./routes/CreateRecipe";
 import Favorite from "./routes/Favorite";
 import Index from "./routes/Index";
 import Login from "./routes/Login";
 import Recipe from "./routes/Recipe";
 import Recipes from "./routes/Recipes";
+import { Provider } from "react-redux";
 
 const routes = createBrowserRouter([
   {
@@ -42,4 +44,8 @@ const routes = createBrowserRouter([
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(<RouterProvider router={routes} />);
+root.render(
+  <Provider store={store}>
+    <RouterProvider router={routes} />
+  </Provider>
+);
