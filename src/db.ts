@@ -1,10 +1,12 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+import { DatabaseConnectionError } from "./errors/database-connection-error";
+const connectDB = () => {
+  mongoose
+    .connect(process.env.dbURI!)
+    .then(() => console.log("connected"))
+    .catch((err) => {
+      throw new DatabaseConnectionError();
+    });
+};
 
-const connectDB = ()=>{
-mongoose.connect(process.env.dbURI! , ()=> {
-    console.log("connected")
-})
-
-}
-
-export  {connectDB} 
+export { connectDB };

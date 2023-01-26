@@ -2,8 +2,7 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { NotAuthorizedError } from "../errors/not-authorized-error";
-
-import User, { IUser } from "../../../property/src/models/userModel";
+import { IUser } from "../models/userModel";
 
 declare global {
   namespace Express {
@@ -15,7 +14,6 @@ declare global {
 
 // generate token
 export const signIn = (id: Types.ObjectId, email: string) => {
- 
   return jwt.sign({ id, email }, process.env.JWT_SECRET || "randomSecret", {
     expiresIn: "30d",
   });

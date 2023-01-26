@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response) => {
       gender,
       password,
     });
-    const token = signIn(user._id);
+    const token = signIn(user._id, email);
     res.status(201).json({
       status: "ok",
       data: {
@@ -74,7 +74,7 @@ export const signin = async (req: Request, res: Response) => {
   const user: any = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    const token = signIn(user._id);
+    const token = signIn(user._id, email);
     return res.status(200).json({
       status: "ok",
       data: {
