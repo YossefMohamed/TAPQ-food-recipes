@@ -11,11 +11,12 @@ export const toasterSlice = createSlice({
   initialState,
   reducers: {
     addToaster: (state, action: PayloadAction<string>) => {
-      console.log(action);
-
       state.errors = [...state.errors, action.payload];
+    },
+    deleteToaster: (state, action: PayloadAction<string>) => {
+      state.errors = state.errors.filter((err) => err !== action.payload);
     },
   },
 });
 
-export const { addToaster } = toasterSlice.actions;
+export const { addToaster, deleteToaster } = toasterSlice.actions;

@@ -22,7 +22,7 @@ const MainLayout = () => {
   return (
     <div className="mx-[150px]">
       <Navbar />
-      <div className="absolute toaster-container top-[100px] right-[150px] flex flex-col gap-1">
+      <div className="fixed toaster-container top-[100px] right-[150px] flex flex-col gap-1">
         {errors.map((err: string) => (
           <Toaster message={err} />
         ))}
