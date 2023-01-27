@@ -10,6 +10,49 @@ const initialState: any = {
   error: [],
 };
 
+export const signin = createAsyncThunk(
+  "auth/signin",
+  async (
+    args: {
+      email: string;
+      password: string;
+    },
+    thunkAPI
+  ) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      console.log(args);
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/users/signin",
+        {
+          email: args.email,
+          password: args.password,
+        }
+      );
+      localStorage.setItem("user", JSON.stringify(data.data.user));
+
+      localStorage.setItem("token", JSON.stringify(data.data.token));
+      return data.data.user;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 export const signup = createAsyncThunk(
   "auth/signup",
   async (
@@ -74,11 +117,18 @@ const userSlice = createSlice({
       state.error = "";
     });
     builder.addCase(signup.rejected, (state, action: any) => {
-      console.log(action);
-      console.log(action);
-      console.log(action);
-      console.log(action);
-
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(signin.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(signin.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(signin.rejected, (state, action: any) => {
       state.loading = false;
       state.error = action.payload;
     });

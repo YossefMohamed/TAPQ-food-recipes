@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import User, { IUser } from "../models/userModel";
 import { signIn } from "../middlewares/auth";
-
+import { NotFoundError } from "../errors/not-found-error";
 export const signup = async (req: Request, res: Response) => {
   try {
     const { name, email, isAdmin, password } = req.body;
@@ -61,10 +61,14 @@ export const editUser = async (req: Request, res: Response) => {
   });
 };
 
-export const signin = async (req: Request, res: Response) => {
+export const signin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
   const user: any = await User.findOne({ email });
-
+  console.log(req.session);
   if (user && (await user.matchPassword(password))) {
     const token = signIn(user._id, email);
     return res.status(200).json({
@@ -82,10 +86,7 @@ export const signin = async (req: Request, res: Response) => {
       },
     });
   }
-  return res.status(404).json({
-    status: "failed",
-    message: "Email or password is incorrect",
-  });
+  next(new NotFoundError("Email or password is wrong"));
 };
 
 export const getUser = async (
@@ -94,6 +95,7 @@ export const getUser = async (
   next: NextFunction
 ) => {
   const { id: userId } = req.params;
+
   if (mongoose.Types.ObjectId.isValid(userId)) {
     const user = await User.findById(new mongoose.Types.ObjectId(userId));
     if (user) {
@@ -103,7 +105,7 @@ export const getUser = async (
       });
     }
   }
-  next(new Error("User Not Found"));
+  next(new Error("Email or password is wrong"));
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
