@@ -1,16 +1,10 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  FormEvent,
-  LegacyRef,
-  useRef,
-  useState,
-} from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCameraFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { addReciepe } from "../redux/slices/recipeSlice";
-import { AppDispatch } from "../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addRecipe, resetRecipe } from "../redux/slices/recipeSlice";
+import { AppDispatch, Rootstate } from "../redux/store/store";
 
 const CreateRecipe = () => {
   const [title, setTitle] = useState("");
@@ -22,10 +16,12 @@ const CreateRecipe = () => {
     tag && setTag("");
   };
   const dispatch = useDispatch<AppDispatch>();
-
+  const { addRecipe: addRecipeState } = useSelector(
+    (state: Rootstate) => state.recipeState
+  );
   const onSubmitRecipe = () => {
     dispatch(
-      addReciepe({
+      addRecipe({
         title,
         tags,
         ingredients,
@@ -33,6 +29,15 @@ const CreateRecipe = () => {
       })
     );
   };
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (addRecipeState.recipe) {
+      const recipe = addRecipeState.recipe;
+      dispatch(resetRecipe());
+      navigate("/recipes/" + recipe);
+    }
+  }, [addRecipeState]);
+
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
   const addIngrediantToArray = (e: FormEvent<HTMLFormElement>) => {

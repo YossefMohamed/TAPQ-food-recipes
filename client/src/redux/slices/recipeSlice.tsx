@@ -3,15 +3,15 @@ import axios from "axios";
 import { addToaster } from "./ToasterSlice";
 
 const initialState: any = {
-  addReciepe: {
+  addRecipe: {
     error: [],
     recipe: "",
     loading: false,
   },
 };
 
-export const addReciepe = createAsyncThunk(
-  "recipe/addReciepe",
+export const addRecipe = createAsyncThunk(
+  "recipe/addRecipe",
   async (
     args: {
       title: string;
@@ -54,7 +54,7 @@ export const addReciepe = createAsyncThunk(
   }
 );
 
-export const getReciepe = createAsyncThunk(
+export const getRecipe = createAsyncThunk(
   "recipe/getReciepe",
   async (
     args: {
@@ -96,23 +96,25 @@ const recipeSlice = createSlice({
   initialState,
   reducers: {
     resetRecipe: (state) => {
-      state.addReciepe.recipe = "";
+      state.addRecipe.recipe = "";
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addReciepe.fulfilled, (state, action) => {
-      state.addReciepe.recipe = action.payload;
-      state.addReciepe.loading = false;
+    builder.addCase(addRecipe.fulfilled, (state, action) => {
+      state.addRecipe.recipe = action.payload;
+      state.addRecipe.loading = false;
     });
-    builder.addCase(addReciepe.pending, (state, action) => {
-      state.addReciepe.loading = true;
-      state.addReciepe.error = "";
+    builder.addCase(addRecipe.pending, (state, action) => {
+      state.addRecipe.loading = true;
+      state.addRecipe.error = "";
     });
-    builder.addCase(addReciepe.rejected, (state, action: any) => {
-      state.addReciepe.loading = false;
-      state.addReciepe.error = action.payload;
+    builder.addCase(addRecipe.rejected, (state, action: any) => {
+      state.addRecipe.loading = false;
+      state.addRecipe.error = action.payload;
     });
   },
 });
+
+export const { resetRecipe } = recipeSlice.actions;
 
 export default recipeSlice;
