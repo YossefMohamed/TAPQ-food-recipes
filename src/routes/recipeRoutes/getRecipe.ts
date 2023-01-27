@@ -4,6 +4,6 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { getRecipeValidators } from "../../services/recipeValidators/getRecipeValidators";
 
 const router = Router();
-router.get("/", getRecipeValidators, validateRequest, getRecipe);
+router.get("/:id", getRecipeValidators, validateRequest, getRecipe);
 
 export { router as getRecipeRouter };

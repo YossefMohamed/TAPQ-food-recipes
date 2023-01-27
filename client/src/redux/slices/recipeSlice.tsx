@@ -8,6 +8,11 @@ const initialState: any = {
     recipe: "",
     loading: false,
   },
+  getRecipe: {
+    error: [],
+    recipe: {},
+    loading: false,
+  },
 };
 
 export const addRecipe = createAsyncThunk(
@@ -70,7 +75,6 @@ export const getRecipe = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data.data);
       return data.data;
     } catch (err: any) {
       err.response.data.error.map((err: any) =>
@@ -111,6 +115,19 @@ const recipeSlice = createSlice({
     builder.addCase(addRecipe.rejected, (state, action: any) => {
       state.addRecipe.loading = false;
       state.addRecipe.error = action.payload;
+    });
+
+    builder.addCase(getRecipe.fulfilled, (state, action) => {
+      state.getRecipe.recipe = action.payload;
+      state.getRecipe.loading = false;
+    });
+    builder.addCase(getRecipe.pending, (state, action) => {
+      state.getRecipe.loading = true;
+      state.getRecipe.error = "";
+    });
+    builder.addCase(getRecipe.rejected, (state, action: any) => {
+      state.getRecipe.loading = false;
+      state.getRecipe.error = action.payload;
     });
   },
 });

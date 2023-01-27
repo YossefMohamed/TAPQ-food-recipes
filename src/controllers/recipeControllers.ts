@@ -5,13 +5,14 @@ import Recipe from "../models/recipeModel";
 
 export const createRecipe = async (req: Request, res: Response) => {
   const { title, ingredients, steps, tags } = req.body;
-  const recipe = await new Recipe({
+  const recipe = new Recipe({
     title,
     ingredients,
     steps,
     tags,
     author: req.session.user!._id,
   });
+  await recipe.save();
   res.status(200).json({
     status: "ok",
     data: recipe,
@@ -25,7 +26,8 @@ export const getRecipe = async (
 ) => {
   const { id } = req.params;
 
-  const recipe = await Recipe.findById(new ObjectId(id));
+  const recipe = await Recipe.findOne();
+
   if (recipe)
     return res.status(200).json({
       status: "ok",
