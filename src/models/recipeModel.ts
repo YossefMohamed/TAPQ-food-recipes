@@ -4,6 +4,7 @@ export interface IRecipe extends Document {
   title: string;
   ingrediantes: string[];
   steps: string[];
+  tags: string[];
   author: mongoose.Schema.Types.ObjectId;
 }
 
@@ -20,6 +21,12 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
       },
     ],
     steps: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    tags: [
       {
         type: String,
         required: true,

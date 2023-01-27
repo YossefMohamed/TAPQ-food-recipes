@@ -7,22 +7,30 @@ import morgan from "morgan";
 import { Router } from "express";
 import { errorHandler } from "./middlewares/error-handler";
 import cors from "cors";
-import cookieSession from "cookie-session";
+import session from "express-session";
+import { IUser } from "./models/userModel";
 const app = express();
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+const corsOptions = { credentials: true, origin: "http://localhost:3000" };
 
 app.use(cors(corsOptions));
 const router = Router();
 app.use(morgan("dev"));
 app.use(express.json());
+
+declare module "express-session" {
+  interface SessionData {
+    user: IUser;
+  }
+}
+
 app.use(
-  cookieSession({
-    signed: false,
-    secure: process.env.NODE_ENV !== "test",
+  session({
+    secret: process.env.sessionSecret || "mysecret",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
   })
 );
 app.get("/", (req, res) => {

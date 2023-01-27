@@ -28,6 +28,9 @@ export const signin = createAsyncThunk(
         {
           email: args.email,
           password: args.password,
+        },
+        {
+          withCredentials: true,
         }
       );
       localStorage.setItem("user", JSON.stringify(data.data.user));

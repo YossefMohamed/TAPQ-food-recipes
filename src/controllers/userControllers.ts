@@ -14,10 +14,7 @@ export const signup = async (req: Request, res: Response) => {
     });
     const token = signIn(user._id, email);
 
-    req.session = {
-      user: token,
-    };
-    console.log(req.session);
+    req.session.user = user;
 
     res.status(201).json({
       status: "ok",
@@ -68,9 +65,11 @@ export const signin = async (
 ) => {
   const { email, password } = req.body;
   const user: any = await User.findOne({ email });
-  console.log(req.session);
+  console.log(req.session.user);
+  req.session.user = user;
   if (user && (await user.matchPassword(password))) {
     const token = signIn(user._id, email);
+
     return res.status(200).json({
       status: "ok",
       data: {

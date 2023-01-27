@@ -8,36 +8,37 @@ import React, {
 } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCameraFill } from "react-icons/bs";
-import FormInput from "../components/form/FormInput";
+import { useDispatch } from "react-redux";
+import { addReciepe } from "../redux/slices/recipeSlice";
+import { AppDispatch } from "../redux/store/store";
 
 const CreateRecipe = () => {
   const [title, setTitle] = useState("");
-
   const [tags, setTags] = useState<string[]>([]);
   const [tag, setTag] = useState("");
   const addTagToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setTags((prev) => [...prev, tag]);
-    setError("");
     setTag("");
   };
-  const [error, setError] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+
   const onSubmitRecipe = () => {
-    if (title.length < 3) return setError("You have to add valid title");
-    if (tags.length === 0)
-      return setError("You have add one tag to your recipe");
-    if (ingrediants.length < 4)
-      return setError("You have add more ingrediants to your recipe");
-    if (steps.length < 4)
-      return setError("You have add more steps to your recipe");
+    dispatch(
+      addReciepe({
+        title,
+        tags,
+        ingredients,
+        steps,
+      })
+    );
   };
-  const [ingrediants, setIngrediants] = useState<string[]>([]);
-  const [ingrediant, setIngrediant] = useState("");
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [ingredient, setIngredient] = useState("");
   const addIngrediantToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIngrediants((prev) => [...prev, ingrediant]);
-    setIngrediant("");
-    setError("");
+    setIngredients((prev) => [...prev, ingredient]);
+    setIngredient("");
   };
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
@@ -57,11 +58,12 @@ const CreateRecipe = () => {
     e.preventDefault();
     setSteps((prev) => [...prev, step]);
     setStep("");
-    setError("");
   };
   const ref = useRef<HTMLInputElement | null>(null);
   return (
     <div>
+      <div className="title">Create new recipe</div>
+
       <input
         type="file"
         className="hidden"
@@ -77,8 +79,6 @@ const CreateRecipe = () => {
           <BsCameraFill />
         </span>
       </div>
-      <div className="title">Create new recipe</div>
-      {error && <div className="alert">{error}</div>}
       <input
         placeholder="New recipe title here..."
         onChange={(e) => setTitle(e.target.value)}
@@ -122,18 +122,18 @@ const CreateRecipe = () => {
         <div className="title text-lg ">Add ingredients</div>
         <div className="flex flex-col gap-5">
           {" "}
-          {ingrediants.length
-            ? ingrediants.map((ingrediant, idx) => (
+          {ingredients.length
+            ? ingredients.map((ingredient, idx) => (
                 <div className="item flex gap-1 items-center" key={idx}>
                   <div className="number border px-4 py-2  mr-4 rounded-[100%]">
                     {idx + 1}
                   </div>
-                  {ingrediant}
+                  {ingredient}
                   <span
                     className="text-sm cursor-pointer ml-auto"
                     onClick={() => {
-                      setIngrediants((ingrediants) =>
-                        ingrediants.filter(
+                      setIngredients((ingredients) =>
+                        ingredients.filter(
                           (currIgrediant, indx) => indx !== idx
                         )
                       );
@@ -150,11 +150,11 @@ const CreateRecipe = () => {
           onSubmit={addIngrediantToArray}
         >
           <input
-            placeholder={"Add you ingrediants"}
-            onChange={(e) => setIngrediant(e.target.value)}
+            placeholder={"Add you ingredients"}
+            onChange={(e) => setIngredient(e.target.value)}
             name="recipeName"
             type="text"
-            value={ingrediant}
+            value={ingredient}
             className="text-xl text-black w-full py-5 outline-none placeholder-tmuted font-bold"
           />
         </form>
