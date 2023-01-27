@@ -1,10 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import {
-  useLocation,
-  useMatches,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Card from "../components/card/Card";
 import LandscapeCard from "../components/landscapeCard/LandscapeCard";
 import Pagination from "../components/pagination/Pagination";
@@ -13,10 +8,6 @@ function Recipes() {
   const [search, setSearch] = useState("");
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  console.log(location);
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search) return;
@@ -32,9 +23,18 @@ function Recipes() {
       {!searchParams.get("search") ? (
         <>
           <div className="header mt-[80px] ">
-            <div className="text-tmuted text-4xl">
-              Welcome To{" "}
-              <span className="text-main text-6xl font-bold">TAPQ</span>
+            <div className="text-tmuted text-4xl flex items-center">
+              <span>
+                Welcome To
+                <span className="text-main text-6xl font-bold">TAPQ</span>
+              </span>
+
+              <Link
+                to="/create-recipe"
+                className="btn btn-primary text-sm ml-auto"
+              >
+                Create a recipe 👨‍🍳
+              </Link>
             </div>
           </div>
           <div className="landscape-card my-10">
@@ -43,7 +43,7 @@ function Recipes() {
         </>
       ) : (
         <div className="text-tmuted text-4xl">
-          Heres The Results For{" "}
+          Heres The Results For
           <span className="text-main font-bold">
             {searchParams.get("search")}
           </span>

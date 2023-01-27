@@ -1,4 +1,13 @@
-import React, { FormEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEvent,
+  LegacyRef,
+  useRef,
+  useState,
+} from "react";
+import { AiOutlineClose } from "react-icons/ai";
+import { BsCameraFill } from "react-icons/bs";
 import FormInput from "../components/form/FormInput";
 
 const CreateRecipe = () => {
@@ -32,14 +41,42 @@ const CreateRecipe = () => {
   };
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
+  const [image, setImage] = useState<any>();
+  const onChangePicture = (e: any) => {
+    if (e.target.files[0]) {
+      console.log("picture: ", e.target.files);
+      setImage(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImage(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
   const addStepToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSteps((prev) => [...prev, step]);
     setStep("");
     setError("");
   };
+  const ref = useRef<HTMLInputElement | null>(null);
   return (
     <div>
+      <input
+        type="file"
+        className="hidden"
+        ref={ref}
+        onChange={onChangePicture}
+      />
+      <div
+        className="image w-full bg-main h-[500px] rounded-t-2xl hover:opacity-75 relative cursor-pointer transition overflow-hidden"
+        onClick={() => ref.current?.click()}
+      >
+        {image && <img src={image} className="w-full h-full object-cover" />}
+        <span className="text-4xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-light">
+          <BsCameraFill />
+        </span>
+      </div>
       <div className="title">Create new recipe</div>
       {error && <div className="alert">{error}</div>}
       <input
@@ -66,7 +103,7 @@ const CreateRecipe = () => {
                     );
                   }}
                 >
-                  X
+                  <AiOutlineClose />
                 </span>
               </div>
             ))
@@ -102,7 +139,7 @@ const CreateRecipe = () => {
                       );
                     }}
                   >
-                    X
+                    <AiOutlineClose />
                   </span>
                 </div>
               ))
@@ -143,7 +180,7 @@ const CreateRecipe = () => {
                       );
                     }}
                   >
-                    X
+                    <AiOutlineClose />
                   </span>
                 </div>
               ))
