@@ -3,10 +3,8 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
-  lastName: string;
   email: string;
   isAdmin: boolean;
-  gender: string;
   password: string;
   matchPassword: (enteredPassword: string) => Promise<boolean>;
 }
@@ -30,12 +28,6 @@ export interface IUser extends Document {
  *        name:
  *          type: string
  *          default: Jane
- *        gender:
- *          type: string
- *          default: male
- *        lastName:
- *          type: string
- *          default: Doe
  *        password:
  *          type: string
  *          default: stringPassword123
@@ -50,10 +42,6 @@ export interface IUser extends Document {
  *        name:
  *          type: string
  *        _id:
- *          type: string
- *        gender:
- *          type: string
- *        lastName:
  *          type: string
  *        createdAt:
  *          type: string
@@ -82,10 +70,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema<IUser>(
       required: true,
       minlength: 8,
     },
-    lastName: {
-      type: String,
-      required: true,
-    },
+
     email: {
       type: String,
       required: true,
@@ -96,11 +81,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema<IUser>(
     isAdmin: {
       type: Boolean,
       default: false,
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female"],
-      required: true,
     },
   },
   {

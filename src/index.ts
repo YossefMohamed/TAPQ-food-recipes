@@ -7,7 +7,7 @@ console.log(process.env.dbURI);
 
 app.listen(port, () => {
   console.log(`Express is listening at http://localhost:${port}`);
-  // connectDB();
+  connectDB();
 
   swaggerDocs(app, Number(port));
 });

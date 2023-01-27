@@ -5,6 +5,8 @@ const connectDB = () => {
     .connect(process.env.dbURI!)
     .then(() => console.log("connected"))
     .catch((err) => {
+      console.log(err);
+
       throw new DatabaseConnectionError();
     });
 };

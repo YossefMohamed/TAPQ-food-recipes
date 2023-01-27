@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { addToaster } from "./ToasterSlice";
 
 const initialState: any = {
   user: localStorage.getItem("user")
@@ -36,6 +37,17 @@ export const signup = createAsyncThunk(
       localStorage.setItem("token", JSON.stringify(data.data.token));
       return data.data.user;
     } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            "<span className='font-bold'> " +
+              err.field +
+              " :</span> " +
+              err.message
+          )
+        )
+      );
+
       return rejectWithValue(err.response.data.error);
     }
   }
@@ -62,6 +74,11 @@ const userSlice = createSlice({
       state.error = "";
     });
     builder.addCase(signup.rejected, (state, action: any) => {
+      console.log(action);
+      console.log(action);
+      console.log(action);
+      console.log(action);
+
       state.loading = false;
       state.error = action.payload;
     });
