@@ -1,5 +1,8 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FormInput from "../components/form/FormInput";
+import { signup } from "../redux/slices/userSlice";
+import { AppDispatch, Rootstate } from "../redux/store/store";
 
 function Login() {
   const [name, setName] = useState("");
@@ -19,14 +22,23 @@ function Login() {
     setPassword(e.target.value);
   };
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const user = useSelector((state: Rootstate) => state.userState);
+  console.log(user);
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password !== passwordConfirm) {
-      return setError("Password and password confirm not equal");
-    }
-    if (!name || !email || !password || !passwordConfirm) {
-      return setError("Fill all the fileds");
-    }
+    console.log("ggg");
+
+    dispatch(
+      signup({
+        name,
+        email,
+        password,
+        passwordConfirm,
+      })
+    );
   };
   return (
     <div className="flex justify-around  mt-[80px]">
@@ -40,7 +52,7 @@ function Login() {
           )}
 
           <FormInput
-            type="email"
+            type="text"
             name="email"
             value={email}
             label="email"
@@ -73,7 +85,7 @@ function Login() {
             handleonchange={handleNameChange}
           />
           <FormInput
-            type="email"
+            type="text"
             name="email"
             value={email}
             label="email"

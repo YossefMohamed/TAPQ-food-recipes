@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import {
   changeToDarkTheme,
   changeToLightTheme,
-} from "../../redux/slices/ThemeSlices";
-import { Rootstate } from "../../redux/store/store";
+} from "../../redux/slices/ThemeSlice";
+import { AppDispatch, Rootstate } from "../../redux/store/store";
 import "./navbar.css";
-
+import { logout } from "./../../redux/slices/userSlice";
 const Navbar = () => {
   const { themeState } = useSelector((state: Rootstate) => state);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const userState = useSelector((state: Rootstate) => state.userState);
 
   return (
     <div className="nav-container flex justify-between p-4 font-bold items-center border-b-4">
@@ -50,9 +51,16 @@ const Navbar = () => {
             </span>
           )}
         </div>
-        <Link to="signin">
-          <div className="btn-primary">Signin 😊</div>
-        </Link>
+        {!userState.user._id ? (
+          <Link to="signin">
+            <div className="btn-primary"> Signin 😊</div>
+          </Link>
+        ) : (
+          <div className="btn-primary" onClick={() => dispatch(logout())}>
+            {" "}
+            Logout 👋
+          </div>
+        )}
       </div>
     </div>
   );
