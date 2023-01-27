@@ -5,7 +5,7 @@ import { addToaster } from "./ToasterSlice";
 const initialState: any = {
   addReciepe: {
     error: [],
-    recipe: {},
+    recipe: "",
     loading: false,
   },
 };
@@ -23,14 +23,20 @@ export const addReciepe = createAsyncThunk(
   ) => {
     const { rejectWithValue }: any = thunkAPI;
     try {
-      const { data } = await axios.post("http://localhost:5000/api/recipes", {
-        title: args.title,
-        steps: args.steps,
-        ingredients: args.ingredients,
-        tags: args.tags,
-      });
-      console.log(data.data);
-      return data.data;
+      const { data } = await axios.post(
+        "http://localhost:5000/api/recipes",
+        {
+          title: args.title,
+          steps: args.steps,
+          ingredients: args.ingredients,
+          tags: args.tags,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data.data._id;
     } catch (err: any) {
       err.response.data.error.map((err: any) =>
         thunkAPI.dispatch(
@@ -48,23 +54,64 @@ export const addReciepe = createAsyncThunk(
   }
 );
 
+export const getReciepe = createAsyncThunk(
+  "recipe/getReciepe",
+  async (
+    args: {
+      id: string;
+    },
+    thunkAPI
+  ) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/recipes/" + args.id,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data.data);
+      return data.data;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
-  reducers: {},
+  reducers: {
+    resetRecipe: (state) => {
+      state.addReciepe.recipe = "";
+    },
+  },
   extraReducers: (builder) => {
-    // builder.addCase(signin.fulfilled, (state, action) => {
-    //   state.user = action.payload;
-    //   state.loading = false;
-    // });
-    // builder.addCase(signin.pending, (state, action) => {
-    //   state.loading = true;
-    //   state.error = "";
-    // });
-    // builder.addCase(signin.rejected, (state, action: any) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // });
+    builder.addCase(addReciepe.fulfilled, (state, action) => {
+      state.addReciepe.recipe = action.payload;
+      state.addReciepe.loading = false;
+    });
+    builder.addCase(addReciepe.pending, (state, action) => {
+      state.addReciepe.loading = true;
+      state.addReciepe.error = "";
+    });
+    builder.addCase(addReciepe.rejected, (state, action: any) => {
+      state.addReciepe.loading = false;
+      state.addReciepe.error = action.payload;
+    });
   },
 });
 

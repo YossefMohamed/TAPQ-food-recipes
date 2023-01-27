@@ -4,10 +4,10 @@ import { NotFoundError } from "../errors/not-found-error";
 import Recipe from "../models/recipeModel";
 
 export const createRecipe = async (req: Request, res: Response) => {
-  const { title, ingrediantes, steps, tags } = req.body;
+  const { title, ingredients, steps, tags } = req.body;
   const recipe = await new Recipe({
     title,
-    ingrediantes,
+    ingredients,
     steps,
     tags,
     author: req.session.user!._id,

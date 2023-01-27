@@ -18,8 +18,8 @@ const CreateRecipe = () => {
   const [tag, setTag] = useState("");
   const addTagToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setTags((prev) => [...prev, tag]);
-    setTag("");
+    tag && setTags((prev) => [...prev, tag]);
+    tag && setTag("");
   };
   const dispatch = useDispatch<AppDispatch>();
 
@@ -37,8 +37,8 @@ const CreateRecipe = () => {
   const [ingredient, setIngredient] = useState("");
   const addIngrediantToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIngredients((prev) => [...prev, ingredient]);
-    setIngredient("");
+    ingredient && setIngredients((prev) => [...prev, ingredient]);
+    ingredient && setIngredient("");
   };
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
@@ -56,8 +56,8 @@ const CreateRecipe = () => {
   };
   const addStepToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSteps((prev) => [...prev, step]);
-    setStep("");
+    step && setSteps((prev) => [...prev, step]);
+    step && setStep("");
   };
   const ref = useRef<HTMLInputElement | null>(null);
   return (
@@ -167,7 +167,7 @@ const CreateRecipe = () => {
           {" "}
           {steps.length
             ? steps.map((step, idx) => (
-                <div className="item flex gap-1 items-center">
+                <div className="item flex gap-1 items-center" key={idx}>
                   <div className="number border px-4 py-2  mr-4 rounded-[100%] -translate-x-6 bg-white">
                     {idx + 1}
                   </div>
