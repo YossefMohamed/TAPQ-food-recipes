@@ -40,6 +40,38 @@ export const addToFavorite = createAsyncThunk(
   }
 );
 
+export const getFavorites = createAsyncThunk(
+  "favorites/getFavorites",
+  async (_, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/recipes/favorites/me",
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data.data;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
@@ -54,6 +86,19 @@ const favoritesSlice = createSlice({
       state.error = "";
     });
     builder.addCase(addToFavorite.rejected, (state, action: any) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(getFavorites.fulfilled, (state, action) => {
+      state.favorites = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getFavorites.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(getFavorites.rejected, (state, action: any) => {
       state.loading = false;
       state.error = action.payload;
     });

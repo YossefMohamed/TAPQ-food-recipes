@@ -1,7 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/footer/Footer";
 import Navbar from "../components/navbar/Navbar";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import Toaster from "../components/toaster/Toaster";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +11,6 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
     document.querySelectorAll(".tag").forEach((el) => {
       el.addEventListener("click", (e: any) => {

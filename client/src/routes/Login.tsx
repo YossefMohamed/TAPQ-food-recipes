@@ -1,11 +1,13 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import FormInput from "../components/form/FormInput";
 import { signin, signup } from "../redux/slices/userSlice";
 import { AppDispatch, Rootstate } from "../redux/store/store";
 
 function Login() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +27,10 @@ function Login() {
 
   const userState = useSelector((state: Rootstate) => state.userState);
   useEffect(() => {
-    userState.user._id && navigate("/");
+    if (userState.user._id)
+      searchParams.get("to")
+        ? navigate("/" + searchParams.get("to"))
+        : navigate("/");
   }, [userState, navigate]);
 
   const onSubmitSignUp = (e: FormEvent<HTMLFormElement>) => {
