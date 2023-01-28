@@ -6,6 +6,7 @@ import { getAllUsersRouter } from "./getAllUsers";
 import { getCurrentUserRouter } from "./getCurrentUser";
 import { getUserRouter } from "./getUser";
 import { signinRouter } from "./signin";
+import { signoutRouter } from "./signout";
 import { signupRoutes } from "./signup";
 
 const userRouter = Router();
@@ -17,5 +18,6 @@ userRouter.use(getAllUsersRouter);
 userRouter.use(editUserRouter);
 userRouter.use(getCurrentUserRouter);
 userRouter.use(getUserRouter);
+userRouter.use(signoutRouter);
 
 export { userRouter };

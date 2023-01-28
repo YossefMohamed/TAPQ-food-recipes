@@ -9,6 +9,6 @@ export const requireLogin = (
   if (req.session && req.session.user) {
     return next();
   } else {
-    return next(new NotAuthorizedError("Kindly login"));
+    return next(new NotAuthorizedError("Please login"));
   }
 };

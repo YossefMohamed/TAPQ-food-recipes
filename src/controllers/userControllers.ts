@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import User, { IUser } from "../models/userModel";
 import { signIn } from "../middlewares/auth";
 import { NotFoundError } from "../errors/not-found-error";
+import { NotAuthorizedError } from "../errors/not-authorized-error";
 export const signup = async (req: Request, res: Response) => {
   try {
     const { name, email, isAdmin, password } = req.body;
@@ -115,5 +116,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
   res.status(200).json({
     status: "ok",
     data: users,
+  });
+};
+
+export const signout = (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    res.send(); // will always fire after session is destroyed
   });
 };

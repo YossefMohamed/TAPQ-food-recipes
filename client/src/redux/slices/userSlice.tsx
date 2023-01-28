@@ -112,17 +112,31 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
+export const signoutCurrentUser = createAsyncThunk(
+  "auth/signoutCurrentUser",
+  async (_, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      await axios.post(
+        "http://localhost:5000/api/users/signout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return;
+    } catch (err: any) {
+      console.log(err.response.data.error);
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    logout: (state) => {
-      console.log("logouted");
-
-      state.user = {};
-      localStorage.removeItem("user");
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signup.fulfilled, (state, action) => {
       state.user = action.payload;
@@ -158,8 +172,11 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+
+    builder.addCase(signoutCurrentUser.fulfilled, (state, action) => {
+      state.user = {};
+    });
   },
 });
 
-export const { logout } = userSlice.actions;
 export default userSlice;

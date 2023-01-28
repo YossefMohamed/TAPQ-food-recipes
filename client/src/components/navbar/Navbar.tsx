@@ -7,7 +7,7 @@ import {
 } from "../../redux/slices/ThemeSlice";
 import { AppDispatch, Rootstate } from "../../redux/store/store";
 import "./navbar.css";
-import { logout } from "./../../redux/slices/userSlice";
+import { signoutCurrentUser } from "./../../redux/slices/userSlice";
 const Navbar = () => {
   const { themeState } = useSelector((state: Rootstate) => state);
 
@@ -56,7 +56,10 @@ const Navbar = () => {
             <div className="btn-primary"> Signin 😊</div>
           </Link>
         ) : (
-          <div className="btn-primary" onClick={() => dispatch(logout())}>
+          <div
+            className="btn-primary"
+            onClick={() => dispatch(signoutCurrentUser())}
+          >
             {" "}
             Logout 👋
           </div>
