@@ -11,7 +11,7 @@ const initialState: any = {
   getRecipe: {
     error: [],
     recipe: {},
-    loading: false,
+    loading: true,
   },
 };
 
@@ -23,6 +23,7 @@ export const addRecipe = createAsyncThunk(
       steps: string[];
       tags: string[];
       ingredients: string[];
+      description: string;
     },
     thunkAPI
   ) => {
@@ -35,6 +36,7 @@ export const addRecipe = createAsyncThunk(
           steps: args.steps,
           ingredients: args.ingredients,
           tags: args.tags,
+          description: args.description,
         },
         {
           withCredentials: true,
@@ -75,8 +77,12 @@ export const getRecipe = createAsyncThunk(
           withCredentials: true,
         }
       );
+      console.log(data.data);
+
       return data.data;
     } catch (err: any) {
+      console.log("as");
+
       err.response.data.error.map((err: any) =>
         thunkAPI.dispatch(
           addToaster(

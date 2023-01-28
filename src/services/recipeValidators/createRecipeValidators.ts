@@ -11,6 +11,16 @@ export const createRecipeValidators = [
       min: 5,
     })
     .withMessage("Title must be more than 4 letters"),
+  body("description")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Cant be empty")
+    .bail()
+    .isLength({
+      min: 100,
+    })
+    .withMessage("Title must be more than 100 letters"),
   body("ingredients")
     .isArray({
       min: 3,

@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 export interface IRecipe extends Document {
   title: string;
+  description: string;
   ingredients: string[];
   steps: string[];
   tags: string[];
@@ -11,6 +12,10 @@ export interface IRecipe extends Document {
 const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
   {
     title: {
+      type: String,
+      required: true,
+    },
+    description: {
       type: String,
       required: true,
     },

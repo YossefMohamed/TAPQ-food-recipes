@@ -26,6 +26,7 @@ const CreateRecipe = () => {
         tags,
         ingredients,
         steps,
+        description,
       })
     );
   };
@@ -47,6 +48,7 @@ const CreateRecipe = () => {
   };
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState<any>();
   const onChangePicture = (e: any) => {
     if (e.target.files[0]) {
@@ -92,6 +94,15 @@ const CreateRecipe = () => {
         value={title}
         className="text-4xl text-black w-full py-5 outline-none placeholder-tmuted font-bold"
       />
+
+      <textarea
+        name=""
+        id=""
+        placeholder="Add description..."
+        className="w-full  outline-none py-4 text-xl"
+        onChange={(e) => setDescription(e.target.value)}
+        value={description}
+      ></textarea>
       <form className="flex items-center gap-2" onSubmit={addTagToArray}>
         {tags.length
           ? tags.map((tag, idx) => (

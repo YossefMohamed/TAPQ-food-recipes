@@ -15,6 +15,7 @@ const routes = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <div>Error Not Found 404</div>,
     children: [
       { index: true, element: <Index /> },
       {

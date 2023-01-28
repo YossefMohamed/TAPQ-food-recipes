@@ -12,17 +12,17 @@ function Recipe() {
   const { recipeId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   useLayoutEffect(() => {
-    recipeId &&
-      dispatch(
-        getRecipe({
-          id: recipeId,
-        })
-      );
-  }, []);
+    dispatch(
+      getRecipe({
+        id: recipeId!,
+      })
+    );
+  }, [recipeId]);
 
   const { getRecipe: getRecipeState } = useSelector(
     (state: Rootstate) => state.recipeState
   );
+  console.log(getRecipeState);
 
   return (
     <>
@@ -108,10 +108,7 @@ function Recipe() {
                 4
               </div>
               <div className="brive italic text-xl font-semibold text-gray-800">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis
-                voluptate reiciendis impedit dicta est aspernatur maiores alias,
-                veritatis illo molestias accusantium iusto. Et id, nemo possimus
-                maiores neque voluptatum velit!
+                {getRecipeState.recipe.description}
               </div>
               <div className="author border-y py-5">
                 <div className="flex items-center space-x-4">
