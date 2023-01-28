@@ -1,7 +1,24 @@
-import { AiOutlineHeart } from "react-icons/ai";
+import { FC } from "react";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { BiLoader } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { addToFavorite } from "../../redux/slices/favoritesSlice";
+import { AppDispatch, Rootstate } from "../../redux/store/store";
 
-function Card() {
+const Card: FC<{ title?: string; tags?: string[]; id?: string }> = ({
+  title = "Beef Burger",
+  tags = ["Beef"],
+  id,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const favoritesState = useSelector(
+    (state: Rootstate) => state.favoritesState
+  );
+  const addToFavoriteOnClick = () => {
+    id && dispatch(addToFavorite({ id }));
+  };
+
   return (
     <div className="overflow-hidden rounded-2xl shadow-2xl  hover:shadow-xl hover:bg-gray-100 ">
       <div className="flex items-center h-[250px] overflow-hidden">
@@ -10,17 +27,37 @@ function Card() {
       <div className="p-2">
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <div>
-            <p className="text-tmuted">Fast Food • Burger</p>
+            <p className="text-tmuted uppercase text-sm last:hidden">
+              {tags.map((tag: string, idx: number) => (
+                <span key={idx}>{tag + " • "}</span>
+              ))}{" "}
+            </p>
 
             <Link to="/recipes/234">
               <h2 className="mt-2 text-lg font-semibold text-gray-800">
-                Beef Hamburger
+                {title}
               </h2>
             </Link>
           </div>
-          <span className="mt-2 inline-block rounded-full bg-main text-tsecondary p-3 text-sm font-medium">
-            {" "}
-            <AiOutlineHeart />
+          <span
+            className="mt-2 inline-block rounded-full bg-main text-tsecondary p-3 text-sm font-medium cursor-pointer"
+            onClick={addToFavoriteOnClick}
+          >
+            {favoritesState.loading ? (
+              <BiLoader />
+            ) : (
+              <>
+                {favoritesState.favorites
+                  .map((fav: any) => {
+                    return fav._id === id;
+                  })
+                  .includes(true) ? (
+                  <AiFillHeart />
+                ) : (
+                  <AiOutlineHeart />
+                )}
+              </>
+            )}
           </span>
         </div>
         <hr className="my-4 text-tmuted" />
@@ -65,6 +102,6 @@ function Card() {
       </div>
     </div>
   );
-}
+};
 
 export default Card;

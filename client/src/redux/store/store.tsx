@@ -4,6 +4,7 @@ import logger from "redux-logger";
 import userSlice from "../slices/userSlice";
 import { toasterSlice } from "../slices/ToasterSlice";
 import recipeSlice from "../slices/recipeSlice";
+import favoritesSlice from "../slices/favoritesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     userState: userSlice.reducer,
     toasterState: toasterSlice.reducer,
     recipeState: recipeSlice.reducer,
+    favoritesState: favoritesSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 

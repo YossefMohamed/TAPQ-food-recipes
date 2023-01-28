@@ -77,7 +77,7 @@ function Recipes() {
           {console.log(getRecipesState)}
           {getRecipesState.recipes.map((recipe: any, idx: number) => (
             <div className="my-6" key={idx}>
-              <Card />
+              <Card title={recipe.title} tags={recipe.tags} id={recipe._id} />
             </div>
           ))}
         </div>
