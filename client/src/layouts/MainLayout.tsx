@@ -4,12 +4,15 @@ import Navbar from "../components/navbar/Navbar";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import Toaster from "../components/toaster/Toaster";
-import { useSelector } from "react-redux";
-import { Rootstate } from "../redux/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, Rootstate } from "../redux/store/store";
+import { getCurrentUser } from "../redux/slices/userSlice";
 
 const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     document.querySelectorAll(".tag").forEach((el) => {
       el.addEventListener("click", (e: any) => {
@@ -17,6 +20,7 @@ const MainLayout = () => {
       });
     });
     window.scrollTo({ top: 0 });
+    dispatch(getCurrentUser());
   }, [location]);
   const { errors }: any = useSelector<Rootstate>((state) => state.toasterState);
   return (

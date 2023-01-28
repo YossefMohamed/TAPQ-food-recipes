@@ -3,9 +3,7 @@ import axios from "axios";
 import { addToaster } from "./ToasterSlice";
 
 const initialState: any = {
-  user: localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user") || "{}")
-    : {},
+  user: {},
   loading: false,
   error: [],
 };
@@ -99,6 +97,21 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const getCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (_, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/users/", {
+        withCredentials: true,
+      });
+      return data.data.user;
+    } catch (err: any) {
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -123,6 +136,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
     builder.addCase(signin.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loading = false;
@@ -134,6 +148,15 @@ const userSlice = createSlice({
     builder.addCase(signin.rejected, (state, action: any) => {
       state.loading = false;
       state.error = action.payload;
+    });
+
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getCurrentUser.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
     });
   },
 });

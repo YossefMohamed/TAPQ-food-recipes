@@ -1,42 +1,43 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Card from "../components/card/Card";
+import Header from "../components/header/Header";
 import LandscapeCard from "../components/landscapeCard/LandscapeCard";
 import Pagination from "../components/pagination/Pagination";
+import { SearchInput } from "../components/searchInput/SearchInput";
+import Tag from "../components/tag/Tag";
+import { getRecipes, getTags } from "../redux/slices/recipeSlice";
+import { AppDispatch, Rootstate } from "../redux/store/store";
 
 function Recipes() {
   const [search, setSearch] = useState("");
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitSearchForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search) return;
     navigate(`/recipes?search=${search}`);
   };
 
-  // useEffect(() => {
-  //   alert("changes");
-  // }, [location]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { getRecipes: getRecipesState, getTags: getTagStatus } = useSelector(
+    (state: Rootstate) => state.recipeState
+  );
+  useEffect(() => {
+    dispatch(getRecipes());
+    dispatch(getTags());
+  }, [searchParams]);
+
+  const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
 
   return (
     <div>
       {!searchParams.get("search") ? (
         <>
-          <div className="header mt-[80px] ">
-            <div className="text-tmuted text-4xl flex items-center">
-              <span>
-                Welcome To
-                <span className="text-main text-6xl font-bold">TAPQ</span>
-              </span>
-
-              <Link
-                to="/create-recipe"
-                className="btn btn-primary text-sm ml-auto"
-              >
-                Create a recipe 👨‍🍳
-              </Link>
-            </div>
-          </div>
+          <Header toLink="/create-recipe" />
           <div className="landscape-card my-10">
             <LandscapeCard />
           </div>
@@ -49,102 +50,38 @@ function Recipes() {
           </span>
         </div>
       )}
-      <div className="search my-10">
-        <form onSubmit={onSubmit}>
-          <div className="flex">
-            <div className="relative w-full">
-              <input
-                type="search"
-                id="search-dropdown"
-                className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg  border-l-2 border border-gray-300 focus:ring-main focus:border-main outline-none"
-                placeholder="Search"
-                value={search}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setSearch(e.target.value);
-                }}
-              />
-              <button
-                type="submit"
-                className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-main rounded-r-lg border border-main hover:bg-main focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
+
+      <div className="mt-10 mb-4">
+        <SearchInput
+          onChangeSearchInput={onChangeSearchInput}
+          searchValue={search}
+          onSubmitSearchForm={onSubmitSearchForm}
+        />
+      </div>
+      <div className="tags flex gap-2 flex-wrap">
+        {getTagStatus.loading ? (
+          <div>Loading.....</div>
+        ) : (
+          <>
+            <Tag content={"All Recipes"} selected />
+            {getTagStatus.tags.map((tag: string, idx: number) => (
+              <Tag content={tag} key={idx} />
+            ))}
+          </>
+        )}
+      </div>
+      {getRecipesState.loading ? (
+        <div>loading.....</div>
+      ) : (
+        <div className="recipes my-6 grid grid-cols-3 grid-rows-3 gap-5">
+          {console.log(getRecipesState)}
+          {getRecipesState.recipes.map((recipe: any, idx: number) => (
+            <div className="my-6" key={idx}>
+              <Card />
             </div>
-          </div>
-        </form>
-      </div>{" "}
-      <div className="tags flex gap-4 flex-wrap">
-        <div className="tag bg-main text-tsecondary">All Recipes</div>
-        <div className="tag ">Meals</div>
-
-        <div className="tag ">Deserts</div>
-
-        <div className="tag ">Side Dish</div>
-        <div className="tag ">Fast Food</div>
-        <div className="tag ">Drinks</div>
-        <div className="tag ">Fishes</div>
-      </div>
-      <div className="recipes my-6 flex flex-wrap justify-between">
-        <div className="my-6">
-          <Card />
+          ))}
         </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>{" "}
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>{" "}
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-        <div className="my-6">
-          <Card />
-        </div>
-      </div>
+      )}
       <div className="my-8 text-center flex items-center justify-center">
         <Pagination />
       </div>

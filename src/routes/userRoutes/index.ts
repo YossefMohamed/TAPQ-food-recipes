@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { protect } from "../../middlewares/auth";
+import { requireLogin } from "../../middlewares/protect-route";
 import { editUserRouter } from "./editUser";
 import { getAllUsersRouter } from "./getAllUsers";
 import { getCurrentUserRouter } from "./getCurrentUser";
@@ -11,7 +12,7 @@ const userRouter = Router();
 userRouter.use(signinRouter);
 userRouter.use(signupRoutes);
 
-userRouter.use(protect);
+userRouter.use(requireLogin);
 userRouter.use(getAllUsersRouter);
 userRouter.use(editUserRouter);
 userRouter.use(getCurrentUserRouter);

@@ -13,6 +13,16 @@ const initialState: any = {
     recipe: {},
     loading: true,
   },
+  getRecipes: {
+    error: [],
+    loading: true,
+    recipes: [],
+  },
+  getTags: {
+    error: [],
+    loading: true,
+    tags: [],
+  },
 };
 
 export const addRecipe = createAsyncThunk(
@@ -101,6 +111,68 @@ export const getRecipe = createAsyncThunk(
   }
 );
 
+export const getRecipes = createAsyncThunk(
+  "recipe/getReciepes",
+  async (_, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/recipes/", {
+        withCredentials: true,
+      });
+
+      return data.data;
+    } catch (err: any) {
+      console.log("as");
+
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+export const getTags = createAsyncThunk(
+  "recipe/getTags",
+  async (_, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/recipes/tags",
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data.data;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -134,6 +206,31 @@ const recipeSlice = createSlice({
     builder.addCase(getRecipe.rejected, (state, action: any) => {
       state.getRecipe.loading = false;
       state.getRecipe.error = action.payload;
+    });
+
+    builder.addCase(getRecipes.fulfilled, (state, action) => {
+      state.getRecipes.recipes = action.payload;
+      state.getRecipes.loading = false;
+    });
+    builder.addCase(getRecipes.pending, (state, action) => {
+      state.getRecipes.loading = true;
+      state.getRecipes.error = "";
+    });
+    builder.addCase(getRecipes.rejected, (state, action: any) => {
+      state.getRecipes.loading = false;
+      state.getRecipes.error = action.payload;
+    });
+    builder.addCase(getTags.fulfilled, (state, action) => {
+      state.getTags.tags = action.payload;
+      state.getTags.loading = false;
+    });
+    builder.addCase(getTags.pending, (state, action) => {
+      state.getTags.loading = true;
+      state.getTags.error = "";
+    });
+    builder.addCase(getTags.rejected, (state, action: any) => {
+      state.getTags.loading = false;
+      state.getTags.error = action.payload;
     });
   },
 });

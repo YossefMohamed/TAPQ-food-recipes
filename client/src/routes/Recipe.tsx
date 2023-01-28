@@ -136,7 +136,7 @@ function Recipe() {
                 <div className="title">Ingrediats</div>
                 {getRecipeState.recipe.ingredients.map(
                   (ingredient: string, idx: number) => (
-                    <div className="item flex gap-1 items-center">
+                    <div className="item flex gap-1 items-center" key={idx}>
                       <div className="number border px-4 py-2  mr-4 rounded-[100%]">
                         {idx + 1}
                       </div>
@@ -152,7 +152,7 @@ function Recipe() {
                 <div className="items-container flex flex-col gap-10 border-l-4 translate-x-4">
                   {getRecipeState.recipe.steps.map(
                     (step: string, idx: number) => (
-                      <div className="item flex gap-1 items-center">
+                      <div className="item flex gap-1 items-center" key={idx}>
                         <div className="number border px-4 py-2  mr-4 rounded-[100%] -translate-x-6 bg-white">
                           {idx + 1}
                         </div>

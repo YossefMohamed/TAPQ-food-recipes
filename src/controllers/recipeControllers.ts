@@ -45,13 +45,28 @@ export const getRecipes = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
-  console.log(id);
-
   const recipes = await Recipe.find({}).sort("-createdAt");
-
+  const tags = await Recipe.aggregate([
+    { $unwind: "$tags" },
+    { $group: { _id: { total: { $sum: 1 } }, tags: { $addToSet: "$tags" } } },
+  ]);
   return res.status(200).json({
     status: "ok",
     data: recipes,
+  });
+};
+
+export const getTags = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const tags = await Recipe.aggregate([
+    { $unwind: "$tags" },
+    { $group: { _id: { total: { $sum: 1 } }, tags: { $addToSet: "$tags" } } },
+  ]);
+  res.status(200).json({
+    status: "ok",
+    data: tags[0].tags,
   });
 };
