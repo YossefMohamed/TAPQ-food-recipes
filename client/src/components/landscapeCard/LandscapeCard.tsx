@@ -1,27 +1,59 @@
-import React from "react";
+import React, { FC } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { BiLoader } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { addToFavorite } from "../../redux/slices/favoritesSlice";
+import { AppDispatch, Rootstate } from "../../redux/store/store";
 
-function LandscapeCard() {
+const LandscapeCard: FC<{ title?: string; tags?: string[]; id?: string }> = ({
+  title = "Beef Burger",
+  tags = ["Beef"],
+  id,
+}) => {
+  const favoritesState = useSelector(
+    (state: Rootstate) => state.favoritesState
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  const addToFavoriteOnClick = () => {
+    id && dispatch(addToFavorite({ id }));
+  };
+
   return (
-    <a
-      href="#"
-      className="flex h-[250px] items-center relative bg-white border border-gray-200 rounded-lg shadow flex-row"
-    >
-      <div className="absolute top-2 right-2">
+    <div className="flex h-[250px] items-center relative bg-white border border-gray-200 rounded-lg shadow flex-row">
+      <div
+        className="absolute top-2 right-2 cursor-pointer"
+        onClick={addToFavoriteOnClick}
+      >
         <span className="mt-2 inline-block rounded-full bg-main text-tsecondary p-3 text-sm font-medium">
           {" "}
-          <AiFillHeart />
+          {favoritesState.loading ? (
+            <BiLoader />
+          ) : (
+            <>
+              {favoritesState.favorites
+                .map((fav: any) => {
+                  return fav._id === id;
+                })
+                .includes(true) ? (
+                <AiFillHeart />
+              ) : (
+                <AiOutlineHeart />
+              )}
+            </>
+          )}
         </span>
       </div>
       <img className="object-cover w-1/3 h-full" src="/image2.png" alt="" />
       <div className="flex-1 flex justify-around flex-col  p-4 leading-normal">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           <span className="text-main"> Recipe Of The Day : </span>
-          Pizza With Naguts
+          {title}
         </h5>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
+          {tags.map((tag: string, idx: number) => (
+            <span key={idx}>{tag + " • "}</span>
+          ))}
         </p>
         <hr className="my-4 text-tmuted" />
         <div className="flex flex-wrap justify-between">
@@ -63,8 +95,8 @@ function LandscapeCard() {
           </p>
         </div>
       </div>
-    </a>
+    </div>
   );
-}
+};
 
 export default LandscapeCard;

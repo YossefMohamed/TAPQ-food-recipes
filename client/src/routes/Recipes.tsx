@@ -25,7 +25,7 @@ function Recipes() {
     (state: Rootstate) => state.recipeState
   );
   useEffect(() => {
-    dispatch(getRecipes());
+    dispatch(getRecipes({ search: searchParams.get("search") || "all" }));
     dispatch(getTags());
   }, [searchParams]);
 

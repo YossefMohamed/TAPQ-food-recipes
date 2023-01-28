@@ -10,6 +10,7 @@ import Login from "./routes/Login";
 import Recipe from "./routes/Recipe";
 import Recipes from "./routes/Recipes";
 import { Provider } from "react-redux";
+import { Profile } from "./routes/Profile";
 
 const routes = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
       {
         path: "/create-recipe",
         element: <CreateRecipe />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

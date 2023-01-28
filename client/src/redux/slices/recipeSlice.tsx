@@ -113,12 +113,18 @@ export const getRecipe = createAsyncThunk(
 
 export const getRecipes = createAsyncThunk(
   "recipe/getReciepes",
-  async (_, thunkAPI) => {
+  async ({ search }: { search?: string }, thunkAPI) => {
     const { rejectWithValue }: any = thunkAPI;
     try {
-      const { data } = await axios.get("http://localhost:5000/api/recipes/", {
-        withCredentials: true,
-      });
+      search = search ? `?search=${search}` : "";
+      console.log(search, "search");
+
+      const { data } = await axios.get(
+        "http://localhost:5000/api/recipes" + search,
+        {
+          withCredentials: true,
+        }
+      );
 
       return data.data;
     } catch (err: any) {
