@@ -33,6 +33,13 @@ const Navbar = () => {
             Favorites
           </Link>
         </div>
+        {userState.user._id && (
+          <div className="item ">
+            <Link to="/profile" className="flex gap-2 items-center ">
+              Profile
+            </Link>
+          </div>
+        )}
         <div className="item cursor-pointer">
           {themeState.theme === "light" ? (
             <span

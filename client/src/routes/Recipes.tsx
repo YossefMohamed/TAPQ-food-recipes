@@ -7,7 +7,7 @@ import LandscapeCard from "../components/landscapeCard/LandscapeCard";
 import Pagination from "../components/pagination/Pagination";
 import { SearchInput } from "../components/searchInput/SearchInput";
 import Tag from "../components/tag/Tag";
-import { getRecipes, getTags } from "../redux/slices/recipeSlice";
+import { getHomeData, getRecipes, getTags } from "../redux/slices/recipeSlice";
 import { AppDispatch, Rootstate } from "../redux/store/store";
 
 function Recipes() {
@@ -24,9 +24,15 @@ function Recipes() {
   const { getRecipes: getRecipesState, getTags: getTagStatus } = useSelector(
     (state: Rootstate) => state.recipeState
   );
+
+  const { getHomeData: getHomeDataState } = useSelector(
+    (state: Rootstate) => state.recipeState
+  );
+
   useEffect(() => {
     dispatch(getRecipes({ search: searchParams.get("search") || "all" }));
     dispatch(getTags());
+    dispatch(getHomeData());
   }, [searchParams]);
 
   const onChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,14 +45,24 @@ function Recipes() {
         <>
           <Header toLink="/create-recipe" />
           <div className="landscape-card my-10">
-            <LandscapeCard />
+            {getHomeDataState.loading ? (
+              <div>Loading...</div>
+            ) : (
+              <LandscapeCard
+                title={getHomeDataState.recipes[0].title}
+                tags={getHomeDataState.recipes[0].tags}
+                id={getHomeDataState.recipes[0]._id}
+                imageName={getHomeDataState.recipes[0].image}
+                time={getHomeDataState.recipes[0].time}
+              />
+            )}
           </div>
         </>
       ) : (
         <div className="text-tmuted text-4xl">
           Heres The Results For
           <span className="text-main font-bold">
-            {searchParams.get("search")}
+            {" " + searchParams.get("search")}
           </span>
         </div>
       )}
@@ -63,9 +79,9 @@ function Recipes() {
           <div>Loading.....</div>
         ) : (
           <>
-            <Tag content={"All Recipes"} selected />
+            <Tag content={"All Recipes"} selected to={`/recipes`} />
             {getTagStatus.tags.map((tag: string, idx: number) => (
-              <Tag content={tag} key={idx} />
+              <Tag content={tag} key={idx} to={`/recipes?search=${tag}`} />
             ))}
           </>
         )}
@@ -74,10 +90,18 @@ function Recipes() {
         <div>loading.....</div>
       ) : (
         <div className="recipes my-6 grid grid-cols-3 grid-rows-3 gap-5">
-          {console.log(getRecipesState)}
+          {!getRecipesState.recipes.length && (
+            <div className="my-8 text-2xl">There's no results 😥</div>
+          )}
           {getRecipesState.recipes.map((recipe: any, idx: number) => (
             <div className="my-6" key={idx}>
-              <Card title={recipe.title} tags={recipe.tags} id={recipe._id} />
+              <Card
+                title={recipe.title}
+                tags={recipe.tags}
+                id={recipe._id}
+                imageName={recipe.image}
+                time={recipe.time}
+              />
             </div>
           ))}
         </div>

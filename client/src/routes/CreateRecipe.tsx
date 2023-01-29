@@ -20,6 +20,8 @@ const CreateRecipe = () => {
   const { addRecipe: addRecipeState } = useSelector(
     (state: Rootstate) => state.recipeState
   );
+
+  const { user } = useSelector((state: Rootstate) => state.userState);
   const onSubmitRecipe = () => {
     const formData = new FormData();
 
@@ -32,17 +34,24 @@ const CreateRecipe = () => {
         steps,
         description,
         formData,
+        time,
       })
     );
   };
+  useEffect(() => {
+    dispatch(resetRecipe());
+  }, []);
   const navigate = useNavigate();
   useEffect(() => {
+    if (!user._id) {
+      navigate("/signin?to=create-recipe");
+    }
     if (addRecipeState.recipe) {
       const recipe = addRecipeState.recipe;
       dispatch(resetRecipe());
       navigate("/recipes/" + recipe);
     }
-  }, [addRecipeState]);
+  }, [addRecipeState, user]);
 
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
@@ -51,6 +60,7 @@ const CreateRecipe = () => {
     ingredient && setIngredients((prev) => [...prev, ingredient]);
     ingredient && setIngredient("");
   };
+  const [time, setTime] = useState<number>();
 
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
@@ -105,10 +115,11 @@ const CreateRecipe = () => {
         name=""
         id=""
         placeholder="Add description..."
-        className="w-full  outline-none py-4 text-xl"
+        className="w-full  outline-none py-4 text-xl  "
         onChange={(e) => setDescription(e.target.value)}
         value={description}
       ></textarea>
+
       <form className="flex items-center gap-2" onSubmit={addTagToArray}>
         {tags.length
           ? tags.map((tag, idx) => (
@@ -140,6 +151,14 @@ const CreateRecipe = () => {
           className="text-xl text-black w-full py-5 outline-none placeholder-tmuted font-bold"
         />
       </form>
+      <input
+        placeholder={"Time in minutes needed to be cooked 🧭"}
+        onChange={(e) => setTime(Number(e.target.value))}
+        name="time"
+        type="number"
+        value={time}
+        className="text-xl text-black w-full py-5 outline-none placeholder-tmuted font-bold"
+      />
       <div className="ingredients">
         <div className="title text-lg ">Add ingredients</div>
         <div className="flex flex-col gap-5">

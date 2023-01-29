@@ -11,7 +11,7 @@ export const createRecipe = async (
   next: NextFunction
 ) => {
   try {
-    const { title, ingredients, steps, tags, description } = req.body;
+    const { title, ingredients, steps, tags, description, time } = req.body;
     const recipe = new Recipe({
       title,
       ingredients,
@@ -19,6 +19,7 @@ export const createRecipe = async (
       tags,
       description,
       author: req.session.user!._id,
+      time,
     });
     await recipe.save();
     res.status(200).json({
@@ -38,10 +39,7 @@ export const getRecipe = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-  console.log(id);
-
   const recipe = await Recipe.findById(new ObjectId(id));
-
   if (recipe)
     return res.status(200).json({
       status: "ok",
@@ -52,15 +50,15 @@ export const getRecipe = async (
 };
 
 export const getRecipes = async (req: Request, res: Response) => {
-  console.log(req.query);
-
   const recipes = await Recipe.find(
     req.query.search && req.query.search !== "all"
       ? {
           $or: [
             { title: { $regex: req.query.search, $options: "i" } },
             {
-              tags: { $elemMatch: { $regex: req.query.search, $options: "i" } },
+              tags: {
+                $elemMatch: { $regex: req.query.search || "", $options: "i" },
+              },
             },
           ],
         }
@@ -142,20 +140,17 @@ export const uploadRecipeImage = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.file);
-    console.log(req.files);
-    console.log(req.body.keys);
-
+    const name = `${req.params.id}-${Date.now()}.png`;
     sharp(req.file!.buffer)
       .resize(800, 400)
       .toFormat("png")
       .png({ quality: 52 })
-      .toFile(`public/images/${req.params.id}-${Date.now()}.png`);
+      .toFile(`public/images/${name}`);
 
     const recipe = await Recipe.findByIdAndUpdate(
       req.params.id,
       {
-        image: `${req.params.id}-${Date.now()}.png`,
+        image: name,
       },
       {
         new: true,
@@ -170,4 +165,17 @@ export const uploadRecipeImage = async (
 
     next(new Error(error.message));
   }
+};
+
+export const getMetaData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const metaData = await Recipe.find().sort({ favorites: -1 }).limit(8);
+
+  res.status(200).json({
+    status: "ok",
+    data: metaData,
+  });
 };

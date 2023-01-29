@@ -6,15 +6,18 @@ import { Link } from "react-router-dom";
 import { addToFavorite } from "../../redux/slices/favoritesSlice";
 import { AppDispatch, Rootstate } from "../../redux/store/store";
 
-const Card: FC<{ title?: string; tags?: string[]; id?: string }> = ({
-  title = "Beef Burger",
-  tags = ["Beef"],
-  id,
-}) => {
+const Card: FC<{
+  title?: string;
+  tags?: string[];
+  id?: string;
+  imageName?: string;
+  time: number;
+}> = ({ title = "Beef Burger", tags = ["Beef"], id, imageName, time }) => {
   const dispatch = useDispatch<AppDispatch>();
   const favoritesState = useSelector(
     (state: Rootstate) => state.favoritesState
   );
+
   const addToFavoriteOnClick = () => {
     id && dispatch(addToFavorite({ id }));
   };
@@ -22,7 +25,15 @@ const Card: FC<{ title?: string; tags?: string[]; id?: string }> = ({
   return (
     <div className="overflow-hidden rounded-2xl shadow-2xl  hover:shadow-xl hover:bg-gray-100 ">
       <div className="flex items-center h-[250px] overflow-hidden">
-        <img src="/image2.png" alt="Hamburger" className="w-full h-full" />
+        <img
+          src={`${
+            imageName
+              ? "http://localhost:5000/images/" + imageName
+              : "/image2.png"
+          }`}
+          alt="Hamburger"
+          className="w-full h-full"
+        />
       </div>
       <div className="p-2">
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
@@ -33,7 +44,7 @@ const Card: FC<{ title?: string; tags?: string[]; id?: string }> = ({
               ))}{" "}
             </p>
 
-            <Link to="/recipes/234">
+            <Link to={`/recipes/${id}`}>
               <h2 className="mt-2 text-lg font-semibold text-gray-800">
                 {title}
               </h2>
@@ -77,7 +88,7 @@ const Card: FC<{ title?: string; tags?: string[]; id?: string }> = ({
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span className="ml-2 text-gray-600">10 - 15 Mins</span>
+            <span className="ml-2 text-gray-600">{time} Mins</span>
             <span className="mx-2">•</span>
             <span className="text-tmuted">1Km</span>
           </p>

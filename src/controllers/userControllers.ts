@@ -51,16 +51,18 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 export const editUser = async (req: Request, res: Response) => {
   req.session.user = req.session.user!;
   const name = req.body.name ? req.body.name : req.session.user.name;
-  const password = req.body.password
-    ? req.body.password
-    : req.session.user.password;
-
-  req.session.user.name = name;
-  req.session.user.password = password;
-  await req.session.user.save();
+  const user = await User.findByIdAndUpdate(
+    req.session.user._id,
+    {
+      name,
+    },
+    {
+      new: true,
+    }
+  );
   return res.status(200).json({
     status: "ok",
-    data: req.session.user,
+    data: { user },
   });
 };
 

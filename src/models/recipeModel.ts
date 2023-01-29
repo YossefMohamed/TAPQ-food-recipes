@@ -1,4 +1,5 @@
 import mongoose, { PopulatedDoc, Schema } from "mongoose";
+import { IReview } from "./reviewsModel";
 import { IUser } from "./userModel";
 
 export interface IRecipe extends Document {
@@ -10,6 +11,8 @@ export interface IRecipe extends Document {
   author: PopulatedDoc<IUser>;
   favorites: [PopulatedDoc<IUser>];
   image: string;
+  reviews: any;
+  time: number;
 }
 
 const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
@@ -43,7 +46,9 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
         required: true,
       },
     ],
-
+    time: {
+      type: Number,
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -57,13 +62,36 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
   },
   {
     timestamps: true,
+
     toJSON: {
-      transform: function (doc, ret) {
+      transform(doc, ret) {
         delete ret.__v;
       },
+      virtuals: true,
     },
   }
 );
+
+recipeSchema.virtual("reviews", {
+  localField: "_id",
+  foreignField: "recipe",
+  ref: "Review",
+});
+
+recipeSchema.pre(/^find/, async function (this, next: any) {
+  this.populate([
+    {
+      path: "author",
+    },
+    {
+      path: "reviews",
+      populate: {
+        path: "author",
+      },
+    },
+  ]);
+  next();
+});
 
 const Recipe = mongoose.model<IRecipe>("Recipe", recipeSchema);
 export default Recipe;

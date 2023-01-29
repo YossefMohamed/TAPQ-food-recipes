@@ -19,6 +19,11 @@ const initialState: any = {
     loading: true,
     recipes: [],
   },
+  getHomeData: {
+    error: [],
+    loading: true,
+    recipes: [],
+  },
   getTags: {
     error: [],
     loading: true,
@@ -36,11 +41,10 @@ export const addRecipe = createAsyncThunk(
       ingredients: string[];
       description: string;
       formData: FormData;
+      time: number | undefined;
     },
     thunkAPI
   ) => {
-    console.log(args);
-
     const { rejectWithValue }: any = thunkAPI;
     try {
       const { data } = await axios.post(
@@ -51,6 +55,7 @@ export const addRecipe = createAsyncThunk(
           ingredients: args.ingredients,
           tags: args.tags,
           description: args.description,
+          time: args.time,
         },
         {
           withCredentials: true,
@@ -83,6 +88,44 @@ export const addRecipe = createAsyncThunk(
   }
 );
 
+export const addReview = createAsyncThunk(
+  "recipe/addReview",
+  async (
+    args: {
+      content: string;
+      rating: number;
+      recipe: string;
+    },
+    thunkAPI
+  ) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/reviews/" + args.recipe,
+        args,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data.data;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            "<span className='font-bold'> " +
+              err.field +
+              " :</span> " +
+              err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 export const getRecipe = createAsyncThunk(
   "recipe/getReciepe",
   async (
@@ -95,6 +138,41 @@ export const getRecipe = createAsyncThunk(
     try {
       const { data } = await axios.get(
         "http://localhost:5000/api/recipes/" + args.id,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data.data);
+
+      return data.data;
+    } catch (err: any) {
+      console.log("as");
+
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
+export const getHomeData = createAsyncThunk(
+  "recipe/getHomeData",
+  async (args, thunkAPI) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/recipes/home",
         {
           withCredentials: true,
         }
@@ -249,6 +327,22 @@ const recipeSlice = createSlice({
     builder.addCase(getTags.rejected, (state, action: any) => {
       state.getTags.loading = false;
       state.getTags.error = action.payload;
+    });
+    builder.addCase(addReview.fulfilled, (state, action) => {
+      state.getRecipe.recipe = action.payload;
+    });
+
+    builder.addCase(getHomeData.fulfilled, (state, action) => {
+      state.getHomeData.recipes = action.payload;
+      state.getHomeData.loading = false;
+    });
+    builder.addCase(getHomeData.pending, (state, action) => {
+      state.getHomeData.loading = true;
+      state.getHomeData.error = "";
+    });
+    builder.addCase(getHomeData.rejected, (state, action: any) => {
+      state.getHomeData.loading = false;
+      state.getHomeData.error = action.payload;
     });
   },
 });

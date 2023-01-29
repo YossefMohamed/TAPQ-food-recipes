@@ -22,7 +22,6 @@ function Recipe() {
   const { getRecipe: getRecipeState } = useSelector(
     (state: Rootstate) => state.recipeState
   );
-  console.log(getRecipeState);
 
   return (
     <>
@@ -88,14 +87,22 @@ function Recipe() {
                     />
                   </svg>
                   <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                    Beef Hamburger
+                    {getRecipeState.recipe.title}
                   </span>
                 </div>
               </li>
             </ol>
           </nav>
           <div className="recipe-header h-[500px] rounded-t-2xl overflow-hidden">
-            <img src="/image2.png" className="w-full h-full object-cover" />
+            <img
+              src={`${
+                getRecipeState.recipe.image
+                  ? "http://localhost:5000/images/" +
+                    getRecipeState.recipe.image
+                  : "/image2.png"
+              }`}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="description flex m-10">
             <div className="left flex flex-col flex-1 gap-10 px-5 border-x py-5">
@@ -114,17 +121,18 @@ function Recipe() {
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0">
                     <img
-                      className="w-8 h-8 rounded-full"
-                      src="https://cdn.dribbble.com/users/806561/avatars/small/6b21bead9a025f3cf4b9d4cf942f5707.png?1619421975"
-                      alt="Neil image"
+                      className="mr-2 w-6 h-6 rounded-full"
+                      src={`https://api.dicebear.com/5.x/croodles/svg?seed=${getRecipeState.recipe.author.name}`}
+                      alt="Michael Gough"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Neil Sims
+                      {getRecipeState.recipe.author.name}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
+                      {getRecipeState.recipe.author.email}
+                      {console.log(getRecipeState.recipe.author)}
                     </p>
                   </div>
                   <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -163,39 +171,26 @@ function Recipe() {
                 </div>
               </div>
               <div className="comments">
-                <Comment />
+                <Comment
+                  reviews={
+                    getRecipeState.recipe.reviews
+                      ? getRecipeState.recipe.reviews
+                      : []
+                  }
+                  recipeId={recipeId}
+                />
               </div>
             </div>
             <div className="right w-[30%] px-5 relative py-5">
               <div className="sticky top-5">
-                <Card />
+                <Card
+                  id={getRecipeState.recipe._id}
+                  imageName={getRecipeState.recipe.image}
+                  tags={getRecipeState.recipe.tags}
+                  title={getRecipeState.recipe.title}
+                  time={getRecipeState.recipe.time}
+                />
               </div>
-            </div>
-          </div>
-
-          <div className="related">
-            <div className="title">Related Recipes :</div>
-            <div className="recipes my-10">
-              <Slider>
-                <div className="keen-slider__slide ">
-                  <Card />
-                </div>{" "}
-                <div className="keen-slider__slide">
-                  <Card />
-                </div>{" "}
-                <div className="keen-slider__slide">
-                  <Card />
-                </div>{" "}
-                <div className="keen-slider__slide">
-                  <Card />
-                </div>{" "}
-                <div className="keen-slider__slide">
-                  <Card />
-                </div>{" "}
-                <div className="keen-slider__slide">
-                  <Card />
-                </div>
-              </Slider>
             </div>
           </div>
         </div>

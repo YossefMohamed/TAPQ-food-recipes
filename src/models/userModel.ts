@@ -94,8 +94,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema<IUser>(
         delete ret.password;
         delete ret.__v;
       },
-    },
-    toObject: {
       virtuals: true,
     },
   }

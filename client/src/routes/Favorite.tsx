@@ -56,13 +56,20 @@ function Favorite() {
               tags={recipe.tags}
               id={recipe._id}
               key={idx}
+              time={recipe.time}
             />
           ))}
         </div>
       ) : (
         <div className="container flex flex-col gap-8">
           {favoritesState.favorites.map((recipe: any, idx: number) => (
-            <LandscapeCard key={idx} />
+            <LandscapeCard
+              title={recipe.title}
+              tags={recipe.tags}
+              id={recipe._id}
+              key={idx}
+              time={recipe.time}
+            />
           ))}
         </div>
       )}

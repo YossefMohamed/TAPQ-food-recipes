@@ -54,6 +54,46 @@ export const signin = createAsyncThunk(
   }
 );
 
+export const editUser = createAsyncThunk(
+  "auth/editUser",
+  async (
+    args: {
+      name: string;
+    },
+    thunkAPI
+  ) => {
+    const { rejectWithValue }: any = thunkAPI;
+    try {
+      console.log(args);
+
+      const { data } = await axios.patch(
+        "http://localhost:5000/api/users/",
+        args,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data.data.user;
+    } catch (err: any) {
+      err.response.data.error.map((err: any) =>
+        thunkAPI.dispatch(
+          addToaster(
+            err.field
+              ? "<span className='font-bold'> " +
+                  err.field +
+                  " :</span> " +
+                  err.message
+              : err.message
+          )
+        )
+      );
+
+      return rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
 export const signup = createAsyncThunk(
   "auth/signup",
   async (
@@ -179,6 +219,11 @@ const userSlice = createSlice({
     });
     builder.addCase(signoutCurrentUser.fulfilled, (state, action) => {
       state.user = {};
+    });
+
+    builder.addCase(editUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
     });
   },
 });

@@ -49,4 +49,5 @@ export const createRecipeValidators = [
     .not()
     .isEmpty()
     .withMessage("Cant be empty"),
+  body("time").not().isEmpty().withMessage("Cant be empty"),
 ];

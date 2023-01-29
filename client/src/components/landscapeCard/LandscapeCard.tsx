@@ -2,23 +2,25 @@ import React, { FC } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiLoader } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { addToFavorite } from "../../redux/slices/favoritesSlice";
 import { AppDispatch, Rootstate } from "../../redux/store/store";
 
-const LandscapeCard: FC<{ title?: string; tags?: string[]; id?: string }> = ({
-  title = "Beef Burger",
-  tags = ["Beef"],
-  id,
-}) => {
+const LandscapeCard: FC<{
+  title?: string;
+  tags?: string[];
+  id?: string;
+  imageName?: string;
+  time: number;
+}> = ({ title = "Beef Burger", tags = ["Beef"], id, imageName, time }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const favoritesState = useSelector(
     (state: Rootstate) => state.favoritesState
   );
-  const dispatch = useDispatch<AppDispatch>();
 
   const addToFavoriteOnClick = () => {
     id && dispatch(addToFavorite({ id }));
   };
-
   return (
     <div className="flex h-[250px] items-center relative bg-white border border-gray-200 rounded-lg shadow flex-row">
       <div
@@ -46,10 +48,12 @@ const LandscapeCard: FC<{ title?: string; tags?: string[]; id?: string }> = ({
       </div>
       <img className="object-cover w-1/3 h-full" src="/image2.png" alt="" />
       <div className="flex-1 flex justify-around flex-col  p-4 leading-normal">
-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          <span className="text-main"> Recipe Of The Day : </span>
-          {title}
-        </h5>
+        <Link to={`/recipes/${id}`}>
+          <h2 className="mt-2 text-lg font-semibold text-gray-800">
+            <span className="text-main uppercase"> Top liked recipe : </span>
+            {title}
+          </h2>
+        </Link>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
           {tags.map((tag: string, idx: number) => (
             <span key={idx}>{tag + " • "}</span>
@@ -72,7 +76,7 @@ const LandscapeCard: FC<{ title?: string; tags?: string[]; id?: string }> = ({
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span className="ml-2 text-gray-600">10 - 15 Mins</span>
+            <span className="ml-2 text-gray-600">{time} Mins</span>
             <span className="mx-2">•</span>
             <span className="text-tmuted">1Km</span>
           </p>
