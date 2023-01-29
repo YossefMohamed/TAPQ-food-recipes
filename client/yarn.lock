@@ -2944,10 +2944,10 @@
   "resolved" "https://registry.npmjs.org/axe-core/-/axe-core-4.6.2.tgz"
   "version" "4.6.2"
 
-"axios@^1.2.4":
-  "integrity" "sha512-lIQuCfBJvZB/Bv7+RWUqEJqNShGOVpk9v7P0ZWx5Ip0qY6u7JBAU6dzQPMLasU9vHL2uD8av/1FDJXj7n6c39w=="
-  "resolved" "https://registry.npmjs.org/axios/-/axios-1.2.4.tgz"
-  "version" "1.2.4"
+"axios@^1.2.6":
+  "integrity" "sha512-rC/7F08XxZwjMV4iuWv+JpD3E0Ksqg9nac4IIg6RwNuF0JTeWoCo/mBNG54+tNhhI11G3/VDRbdDQTs9hGp4pQ=="
+  "resolved" "https://registry.npmjs.org/axios/-/axios-1.2.6.tgz"
+  "version" "1.2.6"
   dependencies:
     "follow-redirects" "^1.15.0"
     "form-data" "^4.0.0"

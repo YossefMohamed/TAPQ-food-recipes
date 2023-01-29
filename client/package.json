@@ -15,7 +15,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "axios": "^1.2.4",
+    "axios": "^1.2.6",
     "keen-slider": "^6.8.5",
     "mdb-react-ui-kit": "^5.1.0",
     "moment": "^2.29.4",

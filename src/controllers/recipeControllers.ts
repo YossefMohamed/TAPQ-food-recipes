@@ -143,6 +143,7 @@ export const uploadRecipeImage = async (
 ) => {
   try {
     console.log(req.file);
+    console.log(req.files);
     console.log(req.body.keys);
 
     sharp(req.file!.buffer)
@@ -154,7 +155,7 @@ export const uploadRecipeImage = async (
     const recipe = await Recipe.findByIdAndUpdate(
       req.params.id,
       {
-        image: req.file!.filename,
+        image: `${req.params.id}-${Date.now()}.png`,
       },
       {
         new: true,

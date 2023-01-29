@@ -57,16 +57,13 @@ export const addRecipe = createAsyncThunk(
         }
       );
 
-      await axios.post(
-        "http://localhost:5000/api/recipes/upload/" + data.data._id,
-        args.formData,
-        {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      await axios({
+        method: "post",
+        url: `http://localhost:5000/api/recipes/upload/${data.data._id}`,
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+        data: args.formData,
+      });
 
       return data.data._id;
     } catch (err: any) {

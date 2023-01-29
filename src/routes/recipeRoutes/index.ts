@@ -13,10 +13,10 @@ recipeRouter.use(createRecipeRouter);
 recipeRouter.use(getTagsRouter);
 recipeRouter.use(getRecipeRouter);
 recipeRouter.use(getRecipesRouter);
+recipeRouter.use(uploadImageRouter);
 
 recipeRouter.use(requireLogin);
 recipeRouter.use(getMyFavoritesRouter);
 recipeRouter.use(addRecipeToFavoritesRouter);
-recipeRouter.use(uploadImageRouter);
 
 export { recipeRouter };
