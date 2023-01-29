@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { PopulatedDoc, Schema } from "mongoose";
+import { IUser } from "./userModel";
 
 export interface IRecipe extends Document {
   title: string;
@@ -6,7 +7,9 @@ export interface IRecipe extends Document {
   ingredients: string[];
   steps: string[];
   tags: string[];
-  author: mongoose.Schema.Types.ObjectId;
+  author: PopulatedDoc<IUser>;
+  favorites: [PopulatedDoc<IUser>];
+  image: string;
 }
 
 const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
@@ -14,6 +17,9 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
     title: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
     },
     description: {
       type: String,
@@ -37,10 +43,17 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
         required: true,
       },
     ],
+
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    favorites: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -52,5 +65,5 @@ const recipeSchema: Schema<IRecipe> = new mongoose.Schema<IRecipe>(
   }
 );
 
-const Recipe = mongoose.model<IRecipe>("Home", recipeSchema);
+const Recipe = mongoose.model<IRecipe>("Recipe", recipeSchema);
 export default Recipe;

@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, PopulatedDoc } from "mongoose";
+import { IRecipe } from "./recipeModel";
 
 export interface IUser extends Document {
   name: string;
@@ -7,6 +8,7 @@ export interface IUser extends Document {
   isAdmin: boolean;
   password: string;
   matchPassword: (enteredPassword: string) => Promise<boolean>;
+  favorites: [PopulatedDoc<IRecipe>];
 }
 
 /**
@@ -78,6 +80,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema<IUser>(
       unique: true,
       lowercase: true,
     },
+
     isAdmin: {
       type: Boolean,
       default: false,
@@ -92,12 +95,26 @@ const userSchema: Schema<IUser> = new mongoose.Schema<IUser>(
         delete ret.__v;
       },
     },
+    toObject: {
+      virtuals: true,
+    },
   }
 );
+
+userSchema.virtual("favorites", {
+  localField: "_id",
+  foreignField: "favorites",
+  ref: "Recipe",
+});
 
 userSchema.pre("save", async function (this, next: any) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 8);
+  next();
+});
+
+userSchema.pre("find", async function (this, next: any) {
+  this.populate("favorites");
   next();
 });
 

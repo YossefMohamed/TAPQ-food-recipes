@@ -7,6 +7,7 @@ const initialState: any = {
     error: [],
     recipe: "",
     loading: false,
+    imageUploaded: false,
   },
   getRecipe: {
     error: [],
@@ -34,9 +35,12 @@ export const addRecipe = createAsyncThunk(
       tags: string[];
       ingredients: string[];
       description: string;
+      formData: FormData;
     },
     thunkAPI
   ) => {
+    console.log(args);
+
     const { rejectWithValue }: any = thunkAPI;
     try {
       const { data } = await axios.post(
@@ -49,6 +53,17 @@ export const addRecipe = createAsyncThunk(
           description: args.description,
         },
         {
+          withCredentials: true,
+        }
+      );
+
+      await axios.post(
+        "http://localhost:5000/api/recipes/upload/" + data.data._id,
+        args.formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
           withCredentials: true,
         }
       );

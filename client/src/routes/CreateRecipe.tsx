@@ -10,6 +10,7 @@ const CreateRecipe = () => {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tag, setTag] = useState("");
+
   const addTagToArray = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     tag && setTags((prev) => [...prev, tag]);
@@ -20,6 +21,9 @@ const CreateRecipe = () => {
     (state: Rootstate) => state.recipeState
   );
   const onSubmitRecipe = () => {
+    const formData = new FormData();
+
+    formData.append("image", image);
     dispatch(
       addRecipe({
         title,
@@ -27,6 +31,7 @@ const CreateRecipe = () => {
         ingredients,
         steps,
         description,
+        formData,
       })
     );
   };
@@ -46,13 +51,14 @@ const CreateRecipe = () => {
     ingredient && setIngredients((prev) => [...prev, ingredient]);
     ingredient && setIngredient("");
   };
+
   const [steps, setSteps] = useState<string[]>([]);
   const [step, setStep] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<any>();
   const onChangePicture = (e: any) => {
+    console.log("picture: ", e.target.files);
     if (e.target.files[0]) {
-      console.log("picture: ", e.target.files);
       setImage(e.target.files[0]);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -73,7 +79,7 @@ const CreateRecipe = () => {
 
       <input
         type="file"
-        className="hidden"
+        className="hidden image-input"
         ref={ref}
         onChange={onChangePicture}
       />

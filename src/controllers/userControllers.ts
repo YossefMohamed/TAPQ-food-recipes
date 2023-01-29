@@ -4,6 +4,8 @@ import User, { IUser } from "../models/userModel";
 import { signIn } from "../middlewares/auth";
 import { NotFoundError } from "../errors/not-found-error";
 import { NotAuthorizedError } from "../errors/not-authorized-error";
+import Recipe from "../models/recipeModel";
+import { ObjectId } from "mongodb";
 export const signup = async (req: Request, res: Response) => {
   try {
     const { name, email, isAdmin, password } = req.body;
@@ -69,7 +71,6 @@ export const signin = async (
 ) => {
   const { email, password } = req.body;
   const user: any = await User.findOne({ email });
-  console.log(req.session.user);
   req.session.user = user;
   if (user && (await user.matchPassword(password))) {
     const token = signIn(user._id, email);

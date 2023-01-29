@@ -173,6 +173,10 @@ const userSlice = createSlice({
       state.error = "";
     });
 
+    builder.addCase(getCurrentUser.rejected, (state, action) => {
+      state.user = {};
+      state.error = "";
+    });
     builder.addCase(signoutCurrentUser.fulfilled, (state, action) => {
       state.user = {};
     });
